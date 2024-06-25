@@ -16,10 +16,7 @@ class AutheticationController extends Controller
     public function login(Request $request)
     {
         // Consulta SQL vulnerable
-        //$user = DB::select("SELECT * FROM users WHERE email = '$request->email' AND password = '$request->password'");
-
-        // Consulta sanitizada
-        //$user = DB::select("SELECT * FROM users WHERE email = ? AND password = ?", [$request->email, $request->password]);
+        $user = DB::select("SELECT * FROM users WHERE email = '$request->email' AND password = '$request->password'");
 
         // Validación de entradas
         $validate = $request->validate([
@@ -27,11 +24,13 @@ class AutheticationController extends Controller
             'password' => 'required',
         ]);
 
-        // Consulta sanitizada
-        //$user = DB::select("SELECT * FROM users WHERE email = ? AND password = ?", [$request->email, $request->password]);
         // Consulta validada y sanitizada
+        $user = DB::select("SELECT * FROM users WHERE email = ? AND password = ?", [e($validate->email), e($validate->password)]);
+        
+        // Consulta validada, sanitizada y construida con Eloquent
         $user = User::where('email', $validate('email'))->where('password', $validate('password'))->first();
 
+        // retorno de información
         return dd($user);
     }
 }
