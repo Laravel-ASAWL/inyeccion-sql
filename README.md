@@ -60,8 +60,8 @@ $validate = $request->validate([
 ]);
 
 // Sanitización de entradas
-$email = e($validate->email);
-$Password = e($validate->password);
+$email = e($validate['email']);
+$Password = e($validate['password']);
 
 // Eloquent
 $user = User::where('email', $email)->where('password', $password)->first();
