@@ -50,7 +50,7 @@ $user = User::where('email', $request->email)->where('password', $request->passw
 
 ### Mitigación de la inyección SQL
 
-Ver: [app/Http/Controllers/AuthentificacionController.php](app/Http/Controllers/AuthentificacionController.php)
+Ver: [app/Http/Controllers/AuthentificacionController.php](./app/Http/Controllers/AutheticationController.php)
 
 ```php
 // Validación de entradas
