@@ -50,18 +50,24 @@ $user = User::where('email', $request->email)->where('password', $request->passw
 
 ### Mitigación de la inyección SQL
 
-Ver: [app/Http/Controllers/AuthentificacionController.php](./app/Http/Controllers/AutheticationController.php)
+La mitigación de inyección SQL se la realiza mediante:
+
+-	Validación de entradas.
+-	Sanitización de variables, y.
+-	Utilización de Eloquent ORM.
+
+Como se muestra en el controlador: [app/Http/Controllers/AuthentificacionController.php](./app/Http/Controllers/AutheticationController.php)
 
 ```php
 // Validación de entradas
-$validate = $request->validate([
+$validated = $request->validate([
     'email' => 'required|email',
     'password' => 'required',
 ]);
 
 // Sanitización de entradas
-$email = e($validate['email']);
-$Password = e($validate['password']);
+$email = e($validated['email']);
+$Password = e($validated['password']);
 
 // Eloquent
 $user = User::where('email', $email)->where('password', $password)->first();

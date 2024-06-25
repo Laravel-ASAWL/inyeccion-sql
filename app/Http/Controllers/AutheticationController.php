@@ -20,14 +20,14 @@ class AutheticationController extends Controller
         // $user = DB::select("SELECT * FROM users WHERE email = '$request->email' AND password = '$request->password'");
 
         // Validación de entradas
-        $validate = $request->validate([
+        $validated = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
         // Sanitización de entradas
-        $email = e($validate['email']);
-        $Password = e($validate['password']);
+        $email = e($validated['email']);
+        $Password = e($validated['password']);
 
         // Eloquent
         $user = User::where('email', $email)->where('password', $password)->first();
