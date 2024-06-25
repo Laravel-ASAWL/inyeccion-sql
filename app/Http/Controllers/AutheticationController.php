@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,6 +16,9 @@ class AutheticationController extends Controller
      */
     public function login(Request $request)
     {
+        // Consulta vulnerable a inyección SQL
+        // $user = DB::select("SELECT * FROM users WHERE email = '$request->email' AND password = '$request->password'");
+
         // Validación de entradas
         $validate = $request->validate([
             'email' => 'required|email',
