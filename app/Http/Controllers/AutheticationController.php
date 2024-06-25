@@ -29,7 +29,7 @@ class AutheticationController extends Controller
         $email = e($validated['email']);
         $Password = e($validated['password']);
 
-        // Eloquent
+        // Utilización de Eloquent ORM
         $user = User::where('email', $email)->where('password', $password)->first();
 
         // retorno de información

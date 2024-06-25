@@ -48,7 +48,7 @@ $user = User::where('email', $request->email)->where('password', $request->passw
 -	Siempre sanitizar y validar todas las entradas antes de usarlas en consultas SQL.
 -	Siempre utilizar Eloquent en todas las consultas y ejecución de SQL.
 
-### Mitigación de la inyección SQL
+### Mitigación de la inyección SQL en Laravel
 
 La mitigación de inyección SQL se la realiza mediante:
 
@@ -69,6 +69,6 @@ $validated = $request->validate([
 $email = e($validated['email']);
 $Password = e($validated['password']);
 
-// Eloquent
+// Utilización de Eloquent ORM
 $user = User::where('email', $email)->where('password', $password)->first();
 ```
