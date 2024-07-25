@@ -5,34 +5,55 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
 
 class AutheticationController extends Controller
 {
-    /**
-     * Manejar el inicio de sesión del usuario
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function login(Request $request)
     {
-        // Consulta vulnerable a inyección SQL
-        // $user = DB::select("SELECT * FROM users WHERE email = '$request->email' AND password = '$request->password'");
-
         // Validación de entradas
         $validated = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+        ],[
+            'email.required' => 'Correo requerido',
+            'email.email' => 'Correo inválido',
+            'password.required' => 'Contraseña requerida',
         ]);
 
         // Sanitización de entradas
-        $email = e($validated['email']);
-        $Password = e($validated['password']);
+        $email = strip_tags(trim(e($validated['email'])));
+        $password = strip_tags(trim(e($validated['password'])));
 
-        // Utilización de Eloquent ORM
-        $user = User::where('email', $email)->where('password', $password)->first();
+        // Utilizando Eloquent ORM
+        $user = User::where('email', $email)->first();
 
-        // retorno de información
-        return dd($user);
+        // validando credenciales
+        if (!$user || !Auth::attempt([
+            'email' => $user->email,
+            'password' => $password,
+        ])) {
+            throw ValidationException::withMessages([
+                'email' => ['Credenciales inválidas'], 
+            ]);
+        }
+
+        // generar sesión
+        $request->session()->regenerate();
+
+        // redireccionar a dashboard
+        return redirect()->intended('/dashboard');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->intended('/');
     }
 }
