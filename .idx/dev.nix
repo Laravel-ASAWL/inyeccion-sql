@@ -12,5 +12,12 @@
       "qwtel.sqlite-viewer"
       "rangav.vscode-thunder-client"
     ];
+    workspace = {
+      onCreate = {
+        default.openFiles = [
+          "README.md"
+        ];
+      };
+    };
   };
 }
